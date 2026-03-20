@@ -1,0 +1,17 @@
+CREATE DATABASE NoticeBoard;
+GO
+
+USE NoticeBoard;
+GO
+
+CREATE TABLE Announcements (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Title NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(MAX) NOT NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    Status BIT NOT NULL DEFAULT 1, 
+    Category NVARCHAR(50) NOT NULL, 
+    SubCategory NVARCHAR(50) NOT NULL 
+);
+GO
+

@@ -1,1 +1,3 @@
-<Solution />
+<Solution>
+  <Project Path="NoticeBoard.Core/NoticeBoard.Core.csproj" />
+</Solution>
