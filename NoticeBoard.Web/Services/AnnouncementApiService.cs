@@ -40,5 +40,17 @@ namespace NoticeBoard.Web.Services
             var response = await _httpClient.PostAsJsonAsync("api/announcements", model);
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> UpdateAsync(int id, AnnouncementUpdateViewModel model)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/announcements/{id}", model);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/announcements/{id}");
+            return response.IsSuccessStatusCode;
+        }
     }
 }

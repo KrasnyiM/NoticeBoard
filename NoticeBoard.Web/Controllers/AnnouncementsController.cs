@@ -67,5 +67,76 @@ namespace NoticeBoard.Web.Controllers
             ViewBag.CategoryMap = CategoryMap;
             return View(model);
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var announcement = await _apiService.GetByIdAsync(id);
+            if (announcement == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AnnouncementUpdateViewModel
+            {
+                Id = announcement.Id,
+                Title = announcement.Title,
+                Description = announcement.Description,
+                Category = announcement.Category,
+                SubCategory = announcement.SubCategory,
+                Status = announcement.Status
+            };
+
+            ViewBag.CategoryMap = CategoryMap; 
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, AnnouncementUpdateViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.CategoryMap = CategoryMap;
+                return View(model);
+            }
+
+            var success = await _apiService.UpdateAsync(id, model);
+            if (success)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            ModelState.AddModelError(string.Empty, "Помилка при оновленні через API.");
+            ViewBag.CategoryMap = CategoryMap;
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var announcement = await _apiService.GetByIdAsync(id);
+            if (announcement == null)
+            {
+                return NotFound();
+            }
+            return View(announcement);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var success = await _apiService.DeleteAsync(id);
+            if (success)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
