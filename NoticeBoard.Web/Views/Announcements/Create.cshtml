@@ -1,0 +1,86 @@
+﻿@model NoticeBoard.Web.Models.AnnouncementCreateViewModel
+
+@{
+    ViewData["Title"] = "Створити оголошення";
+    var categoryMap = ViewBag.CategoryMap as Dictionary<string, List<string>>;
+}
+
+<h1>Створити нове оголошення</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Заголовок</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Опис</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Category" class="form-label">Категорія</label>
+                <select asp-for="Category" id="categorySelect" class="form-select">
+                    <option value="">-- Оберіть категорію --</option>
+                    @foreach (var cat in categoryMap!.Keys)
+                    {
+                        <option value="@cat">@cat</option>
+                    }
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SubCategory" class="form-label">Підкатегорія</label>
+                <select asp-for="SubCategory" id="subCategorySelect" class="form-select" disabled>
+                    <option value="">-- Спочатку оберіть категорію --</option>
+                </select>
+                <span asp-validation-for="SubCategory" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Створити</button>
+                <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const categoryMap = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(categoryMap));
+        
+        const categorySelect = document.getElementById('categorySelect');
+        const subCategorySelect = document.getElementById('subCategorySelect');
+
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            subCategorySelect.innerHTML = '<option value="">-- Оберіть підкатегорію --</option>';
+            
+            if (selectedCategory && categoryMap[selectedCategory]) {
+                subCategorySelect.disabled = false;
+                categoryMap[selectedCategory].forEach(subCat => {
+                    const option = document.createElement('option');
+                    option.value = subCat;
+                    option.textContent = subCat;
+                    subCategorySelect.appendChild(option);
+                });
+            } else {
+                subCategorySelect.disabled = true;
+            }
+        });
+    </script>
+}

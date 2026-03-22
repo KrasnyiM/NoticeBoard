@@ -34,5 +34,11 @@ namespace NoticeBoard.Web.Services
 
             return JsonSerializer.Deserialize<AnnouncementViewModel>(content, options);
         }
+
+        public async Task<bool> CreateAsync(AnnouncementCreateViewModel model)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/announcements", model);
+            return response.IsSuccessStatusCode;
+        }
     }
 }
