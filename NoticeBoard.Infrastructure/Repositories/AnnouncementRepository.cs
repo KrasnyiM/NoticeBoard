@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using NoticeBoard.Core.Entities;
 using NoticeBoard.Core.Interfaces;
 using System;
@@ -14,7 +15,7 @@ namespace NoticeBoard.Infrastructure.Repositories
         private readonly string _connectionString;
 
         
-        public AnnouncementRepository(IConfiguration configuration) //configure later
+        public AnnouncementRepository(IConfiguration configuration) 
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection")
                 ?? throw new ArgumentNullException(nameof(configuration), "Connection string is missing");
