@@ -1,0 +1,36 @@
+@Host = https://localhost:7235
+
+### Create
+POST {{Host}}/api/announcements
+Content-Type: application/json
+
+{
+  "title": "Моє перше оголошення!",
+  "description": "Ура, моя база даних і API працюють ідеально.",
+  "category": "IT",
+  "subCategory": "Робота"
+}
+
+### GET
+GET {{Host}}/api/announcements
+Accept: application/json
+
+### GET by id
+GET {{Host}}/api/announcements/1
+Accept: application/json
+
+### Update
+PUT {{Host}}/api/announcements/1
+Content-Type: application/json
+
+{
+  "title": "Моє перше оголошення! (оновлено)",
+  "description": "Ура, моя база даних і API працюють ідеально. (оновлено)",
+  "category": "IT",
+  "subCategory": "Робота",
+  "status": false
+}
+
+### Delete
+DELETE {{Host}}/api/announcements/4
+Accept: application/json
