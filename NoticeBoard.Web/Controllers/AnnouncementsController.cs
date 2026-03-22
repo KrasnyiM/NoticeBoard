@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NoticeBoard.Web.Models;
 using NoticeBoard.Web.Services;
 
@@ -41,6 +42,7 @@ namespace NoticeBoard.Web.Controllers
             return View(announcements);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             ViewBag.CategoryMap = CategoryMap;
@@ -48,6 +50,7 @@ namespace NoticeBoard.Web.Controllers
         }
  
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken] 
         public async Task<IActionResult> Create(AnnouncementCreateViewModel model)
         {
@@ -68,6 +71,7 @@ namespace NoticeBoard.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             var announcement = await _apiService.GetByIdAsync(id);
@@ -91,6 +95,7 @@ namespace NoticeBoard.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, AnnouncementUpdateViewModel model)
         {
@@ -116,6 +121,7 @@ namespace NoticeBoard.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var announcement = await _apiService.GetByIdAsync(id);
@@ -127,6 +133,7 @@ namespace NoticeBoard.Web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
