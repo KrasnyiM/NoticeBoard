@@ -1,0 +1,36 @@
+﻿@model NoticeBoard.Web.Models.AnnouncementViewModel
+
+@{
+    ViewData["Title"] = "Видалити оголошення";
+}
+
+<div class="container mt-4">
+    <h1 class="text-danger">Видалення оголошення</h1>
+    <h3>Ви впевнені, що хочете видалити це оголошення?</h3>
+    <hr />
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">@Model.Category > @Model.SubCategory</h6>
+            <p class="card-text">@Model.Description</p>
+            <p class="card-text">
+                <small class="text-muted">
+                    Створено: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm") |
+                    Статус: @(Model.Status ? "Активне" : "Неактивне")
+                </small>
+            </p>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        
+        <input type="hidden" asp-for="Id" />
+        
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Підтвердити видалення
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+    </form>
+</div>

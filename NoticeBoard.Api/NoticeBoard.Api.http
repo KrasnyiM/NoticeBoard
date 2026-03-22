@@ -7,7 +7,7 @@ Content-Type: application/json
 {
   "title": "Моє перше оголошення!",
   "description": "Ура, моя база даних і API працюють ідеально.",
-  "category": "IT",
+  "category": "Смартфони",
   "subCategory": "Робота"
 }
 

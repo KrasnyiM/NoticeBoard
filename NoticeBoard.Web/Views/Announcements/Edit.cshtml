@@ -1,0 +1,100 @@
+﻿@model NoticeBoard.Web.Models.AnnouncementUpdateViewModel
+
+@{
+    ViewData["Title"] = "Редагувати оголошення";
+    var categoryMap = ViewBag.CategoryMap as Dictionary<string, List<string>>;
+}
+
+<h1>Редагувати оголошення</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Заголовок</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Опис</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input class="form-check-input" asp-for="Status" />
+                <label class="form-check-label" asp-for="Status">
+                    Активне оголошення
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Category" class="form-label">Категорія</label>
+                <select asp-for="Category" id="categorySelect" class="form-select">
+                    <option value="">-- Оберіть категорію --</option>
+                    @foreach (var cat in categoryMap!.Keys)
+                    {
+                        <option value="@cat">@cat</option>
+                    }
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SubCategory" class="form-label">Підкатегорія</label>
+                <select asp-for="SubCategory" id="subCategorySelect" class="form-select">
+                    <option value="@Model.SubCategory">@Model.SubCategory</option>
+                </select>
+                <span asp-validation-for="SubCategory" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Зберегти</button>
+                <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const categoryMap = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(categoryMap));
+        const categorySelect = document.getElementById('categorySelect');
+        const subCategorySelect = document.getElementById('subCategorySelect');
+
+        function populateSubCategories(selectedCategory, selectedSubCategory = '') {
+            subCategorySelect.innerHTML = '<option value="">-- Оберіть підкатегорію --</option>';
+            if (selectedCategory && categoryMap[selectedCategory]) {
+                subCategorySelect.disabled = false;
+                categoryMap[selectedCategory].forEach(subCat => {
+                    const option = document.createElement('option');
+                    option.value = subCat;
+                    option.textContent = subCat;
+                    if (subCat === selectedSubCategory) {
+                        option.selected = true;
+                    }
+                    subCategorySelect.appendChild(option);
+                });
+            } else {
+                subCategorySelect.disabled = true;
+            }
+        }
+
+        populateSubCategories(categorySelect.value, '@Model.SubCategory');
+
+        categorySelect.addEventListener('change', function() {
+            populateSubCategories(this.value);
+        });
+    </script>
+}

@@ -2,4 +2,5 @@
   <Project Path="NoticeBoard.Api/NoticeBoard.Api.csproj" Id="38dd6fb2-e6fb-45c0-aead-9a1d543eb128" />
   <Project Path="NoticeBoard.Core/NoticeBoard.Core.csproj" />
   <Project Path="NoticeBoard.Infrastructure/NoticeBoard.Infrastructure.csproj" Id="913865a6-9cc4-46b1-b139-5cbcbc75d83e" />
+  <Project Path="NoticeBoard.Web/NoticeBoard.Web.csproj" Id="d5e0b1f9-40dc-4208-8f4d-9ef7b0df942e" />
 </Solution>
