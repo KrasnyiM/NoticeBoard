@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using NoticeBoard.Web.Services;
@@ -21,6 +22,28 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
     options.SaveTokens = true;
+    options.Scope.Add("openid");
+
+    options.Events = new Microsoft.AspNetCore.Authentication.OAuth.OAuthEvents
+    {
+        OnCreatingTicket = context =>
+        {
+            if (context.TokenResponse?.Response != null &&
+                context.TokenResponse.Response.RootElement.TryGetProperty("id_token", out var idTokenElement))
+            {
+                var idToken = idTokenElement.GetString();
+
+                if (!string.IsNullOrEmpty(idToken))
+                {
+                    context.Properties.StoreTokens(new[]
+                    {
+                        new AuthenticationToken { Name = "id_token", Value = idToken }
+                    });
+                }
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 builder.Services.AddHttpContextAccessor();
 
@@ -44,6 +67,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

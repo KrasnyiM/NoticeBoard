@@ -21,7 +21,8 @@ namespace NoticeBoard.Web.Services
             var context = _httpContextAccessor.HttpContext;
             if (context != null)
             {
-                var token = await context.GetTokenAsync("access_token");
+                var token = await context.GetTokenAsync("id_token");
+
                 if (!string.IsNullOrEmpty(token))
                 {
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
