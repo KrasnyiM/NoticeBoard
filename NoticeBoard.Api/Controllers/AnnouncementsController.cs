@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NoticeBoard.Api.DTOs;
 using NoticeBoard.Core.Entities;
@@ -35,6 +36,7 @@ namespace NoticeBoard.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateAnnouncementDto dto)
         {
             var announcement = new Announcement
@@ -52,6 +54,7 @@ namespace NoticeBoard.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateAnnouncementDto dto)
         {
             var existing = await _repository.GetByIdAsync(id);
@@ -69,6 +72,7 @@ namespace NoticeBoard.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var existing = await _repository.GetByIdAsync(id);
