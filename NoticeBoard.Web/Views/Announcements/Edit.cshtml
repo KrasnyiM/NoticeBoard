@@ -70,20 +70,27 @@
 
     <script>
         const categoryMap = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(categoryMap));
+        const initialCategory = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Category ?? ""));
+        const initialSubCategory = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SubCategory ?? ""));
+
         const categorySelect = document.getElementById('categorySelect');
         const subCategorySelect = document.getElementById('subCategorySelect');
 
-        function populateSubCategories(selectedCategory, selectedSubCategory = '') {
+        function populateSubCategories(selectedCategory, selectedSubCategory) {
             subCategorySelect.innerHTML = '<option value="">-- Оберіть підкатегорію --</option>';
+
             if (selectedCategory && categoryMap[selectedCategory]) {
                 subCategorySelect.disabled = false;
+                
                 categoryMap[selectedCategory].forEach(subCat => {
                     const option = document.createElement('option');
                     option.value = subCat;
                     option.textContent = subCat;
+                    
                     if (subCat === selectedSubCategory) {
                         option.selected = true;
                     }
+                    
                     subCategorySelect.appendChild(option);
                 });
             } else {
@@ -91,10 +98,10 @@
             }
         }
 
-        populateSubCategories(categorySelect.value, '@Model.SubCategory');
+        populateSubCategories(initialCategory, initialSubCategory);
 
         categorySelect.addEventListener('change', function() {
-            populateSubCategories(this.value);
+            populateSubCategories(this.value, '');
         });
     </script>
 }
